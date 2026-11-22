@@ -4,12 +4,12 @@ import {
   Users,
   BookOpen,
   Award,
-  Database,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
   Lock,
   Layers,
+  FileCheck,
 } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button';
 
@@ -43,12 +43,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
           <a href="#roles" className="hover:text-blue-700 transition-colors">
             Role Access
           </a>
-          <a href="#database" className="hover:text-blue-700 transition-colors">
-            Supabase DB
-          </a>
-          <a href="#architecture" className="hover:text-blue-700 transition-colors">
-            Architecture
-          </a>
         </div>
 
         <div className="flex items-center gap-3">
@@ -69,7 +63,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold mb-6">
             <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-            Supabase PostgreSQL Ready • Feature-Based Architecture
+            Enterprise Student Information System • Multi-Role Access
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -109,7 +103,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
                   AY 2024-2025 • Fall Term
                 </span>
                 <span className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
-                  Supabase DB Synced
+                  System Online
                 </span>
               </div>
             </div>
@@ -142,15 +136,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
             <p className="text-3xl font-extrabold text-blue-400">100%</p>
-            <p className="text-xs text-slate-400 mt-1 font-medium">Type-Safe TypeScript Stack</p>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Type-Safe Platform</p>
           </div>
           <div>
             <p className="text-3xl font-extrabold text-emerald-400">4.0 Scale</p>
             <p className="text-xs text-slate-400 mt-1 font-medium">Weighted GPA Engine</p>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-white">Postgres</p>
-            <p className="text-xs text-slate-400 mt-1 font-medium">Supabase Cloud Database</p>
+            <p className="text-3xl font-extrabold text-white">99.9%</p>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Platform Reliability SLA</p>
           </div>
           <div>
             <p className="text-3xl font-extrabold text-amber-400">&lt; 50ms</p>
@@ -221,11 +215,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
           {/* Feature 5 */}
           <div className="p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 transition-colors space-y-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-100">
-              <Database className="w-5 h-5" />
+              <FileCheck className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-slate-900">Supabase Cloud Database</h3>
+            <h3 className="text-base font-bold text-slate-900">Official Academic Records</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Production PostgreSQL schema with foreign-key cascades, indexing, and Row-Level Security (RLS) policies for complete data integrity.
+              Institutional record storage with tamper-resistant audit trails, enrollment history, and official transcript generation.
             </p>
           </div>
 
@@ -324,19 +318,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
         </div>
       </section>
 
-      {/* 6. Supabase Database Spotlight */}
-      <section id="database" className="py-16 px-6 sm:px-12 max-w-7xl mx-auto">
+      {/* 6. Institutional Portal Access */}
+      <section className="py-16 px-6 sm:px-12 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-2xl border border-slate-200 bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-4 max-w-xl">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-              Database Infrastructure
+              Institutional Operations
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Powered by Supabase PostgreSQL
+              Ready to Access the Academic Portal?
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              The project includes a ready-to-execute <code className="text-emerald-300 bg-slate-800 px-1.5 py-0.5 rounded">migrations/</code> and <code className="text-emerald-300 bg-slate-800 px-1.5 py-0.5 rounded">seed-accounts.sql</code> script.
-              Tables, relations, and initial academic records are provisioned with Row-Level Security.
+              Authenticate using your official university credentials to view enrollments, manage student rosters, and process term grades.
             </p>
           </div>
 
@@ -365,7 +358,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToLogin }) => {
           </div>
 
           <p className="text-[11px] text-slate-400">
-            Feature-Based Architecture • React 19 • Express • TypeScript • Supabase
+            EduRecord University Information System • Secure & Certified
           </p>
         </div>
       </footer>

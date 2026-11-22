@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
-import { GraduationCap, ArrowLeft, UserCheck, Lock, Info } from 'lucide-react';
+import { GraduationCap, ArrowLeft, UserCheck, Lock } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigateHome: () => void;
@@ -109,25 +109,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigateHome, onLoginSuc
               Authenticate & Sign In
             </Button>
           </form>
-
-          {/* Credentials Guide Note */}
-          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2">
-            <div className="flex items-center gap-1.5 text-slate-700 font-bold">
-              <Info className="w-4 h-4 text-blue-700 flex-shrink-0" />
-              <span>Seeded Accounts Reference:</span>
-            </div>
-            <div className="text-[11px] text-slate-600 space-y-1 font-mono">
-              <p>
-                <span className="font-bold text-blue-800">Admin:</span> admin@university.edu / adminPassword123
-              </p>
-              <p>
-                <span className="font-bold text-emerald-800">Faculty:</span> faculty@university.edu / facultyPassword123
-              </p>
-              <p>
-                <span className="font-bold text-amber-800">Student:</span> student@university.edu / studentPassword123
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
