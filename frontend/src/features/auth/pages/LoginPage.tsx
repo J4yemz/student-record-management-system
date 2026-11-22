@@ -38,7 +38,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigateHome, onLoginSuc
           onClick={onNavigateHome}
           className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6 transition-colors mx-auto"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to University Portal Home
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
         </button>
 
         {/* Brand Emblem (Solid Color, Zero Gradient) */}

@@ -66,6 +66,19 @@ export class AuthService {
           throw new AppError('Invalid email or password', 401);
         }
 
+        let resolvedStudentId = data.student_id;
+        if (!resolvedStudentId && data.role === 'student') {
+          const { data: studentRecord } = await supabase
+            .from('students')
+            .select('id, student_id')
+            .ilike('email', email)
+            .maybeSingle();
+
+          if (studentRecord) {
+            resolvedStudentId = studentRecord.id;
+          }
+        }
+
         const user: User = {
           id: data.id,
           email: data.email,
@@ -73,7 +86,7 @@ export class AuthService {
           role: data.role as any,
           department: data.department,
           avatarUrl: data.avatar_url,
-          studentId: data.student_id
+          studentId: resolvedStudentId
         };
 
         const token = signToken({

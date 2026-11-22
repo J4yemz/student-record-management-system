@@ -41,7 +41,6 @@ const AppContent: React.FC = () => {
     <Layout
       currentTab={portalTab}
       onSelectTab={setPortalTab}
-      onGoToLanding={() => setView('landing')}
       onLogout={() => setView('login')}
     >
       {portalTab === 'dashboard' && <DashboardPage onNavigateTab={setPortalTab} />}

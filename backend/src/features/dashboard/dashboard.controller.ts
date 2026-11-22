@@ -4,7 +4,7 @@ import { dashboardService } from './dashboard.service.js';
 export class DashboardController {
   public getStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const stats = await dashboardService.getStats();
+      const stats = await dashboardService.getStats(req.user);
       res.json({ success: true, data: stats });
     } catch (err) {
       next(err);

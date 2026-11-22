@@ -135,8 +135,17 @@ ALTER TABLE public.enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.grades ENABLE ROW LEVEL SECURITY;
 
 -- 11. Security Policies (Allows authorized anon/service role API operations)
-CREATE POLICY "Enable all access for application API" ON public.users FOR ALL USING (true);
-CREATE POLICY "Enable all access for application API" ON public.students FOR ALL USING (true);
-CREATE POLICY "Enable all access for application API" ON public.courses FOR ALL USING (true);
-CREATE POLICY "Enable all access for application API" ON public.enrollments FOR ALL USING (true);
-CREATE POLICY "Enable all access for application API" ON public.grades FOR ALL USING (true);
+CREATE POLICY "Enable all access for application API" ON public.users FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Enable all access for application API" ON public.students FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Enable all access for application API" ON public.courses FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Enable all access for application API" ON public.enrollments FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Enable all access for application API" ON public.grades FOR ALL USING (true) WITH CHECK (true);
+
+-- 12. PostgreSQL Permissions for Supabase API Roles (anon, authenticated, service_role)
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO postgres, anon, authenticated, service_role;

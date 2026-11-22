@@ -1,10 +1,41 @@
 import { Request, Response, NextFunction } from 'express';
 import { studentService } from './student.service.js';
 import { StudentFilterQuery } from './student.types.js';
+import { resolveStudentIdForUser } from '../../shared/utils/student-lookup.js';
+import { AppError } from '../../shared/middleware/error.middleware.js';
 
 export class StudentController {
   public getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const user = req.user;
+
+      // Privacy Enforcement: A student can ONLY see their own student record
+      if (user?.role === 'student') {
+        const studentId = await resolveStudentIdForUser(user);
+        if (!studentId) {
+          res.json({
+            success: true,
+            data: [],
+            pagination: { total: 0, page: 1, limit: 50, totalPages: 0 }
+          });
+          return;
+        }
+
+        const selfRecord = await studentService.getStudentById(studentId);
+        res.json({
+          success: true,
+          data: selfRecord ? [selfRecord] : [],
+          pagination: {
+            total: selfRecord ? 1 : 0,
+            page: 1,
+            limit: 50,
+            totalPages: selfRecord ? 1 : 0
+          }
+        });
+        return;
+      }
+
+      // Admin & Faculty can view all students according to search/filters
       const filters: StudentFilterQuery = {
         search: req.query.search as string,
         department: req.query.department as string,
@@ -35,6 +66,17 @@ export class StudentController {
   public getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const id = req.params.id as string;
+      const user = req.user;
+
+      // Access Control: Students cannot view other students' records
+      if (user?.role === 'student') {
+        const studentId = await resolveStudentIdForUser(user);
+        const selfRecord = studentId ? await studentService.getStudentById(studentId) : null;
+        if (!selfRecord || (id !== selfRecord.id && id !== selfRecord.studentId)) {
+          throw new AppError('Forbidden. Students are strictly restricted to their own record.', 403);
+        }
+      }
+
       const student = await studentService.getStudentById(id);
       res.json({ success: true, data: student });
     } catch (err) {
@@ -45,6 +87,17 @@ export class StudentController {
   public getDetails = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const id = req.params.id as string;
+      const user = req.user;
+
+      // Access Control: Students cannot view other students' record details
+      if (user?.role === 'student') {
+        const studentId = await resolveStudentIdForUser(user);
+        const selfRecord = studentId ? await studentService.getStudentById(studentId) : null;
+        if (!selfRecord || (id !== selfRecord.id && id !== selfRecord.studentId)) {
+          throw new AppError('Forbidden. Students are strictly restricted to their own record details.', 403);
+        }
+      }
+
       const details = await studentService.getStudentDetails(id);
       res.json({ success: true, data: details });
     } catch (err) {

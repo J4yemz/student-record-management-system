@@ -1,9 +1,69 @@
 import { db } from '../../shared/db/memory-db.js';
 import { supabase, isSupabaseConnected } from '../../shared/db/supabase.js';
 import { DashboardStats } from './dashboard.types.js';
+import { AuthTokenPayload } from '../auth/auth.types.js';
+import { resolveStudentIdForUser } from '../../shared/utils/student-lookup.js';
 
 export class DashboardService {
-  public async getStats(): Promise<DashboardStats> {
+  public async getStats(user?: AuthTokenPayload): Promise<DashboardStats> {
+    // Student Privacy Scope: If caller is a student, only return their own metrics
+    if (user?.role === 'student') {
+      const studentId = await resolveStudentIdForUser(user);
+
+      if (isSupabaseConnected() && supabase) {
+        const [
+          { data: student },
+          { data: enrollments },
+          { data: grades }
+        ] = await Promise.all([
+          studentId ? supabase.from('students').select('*').eq('id', studentId).maybeSingle() : Promise.resolve({ data: null }),
+          studentId ? supabase.from('enrollments').select('*').eq('student_id', studentId) : Promise.resolve({ data: [] }),
+          studentId ? supabase.from('grades').select('*').eq('student_id', studentId) : Promise.resolve({ data: [] })
+        ]);
+
+        const allGrades = grades || [];
+        const evaluated = allGrades.filter((g: any) => g.remarks !== 'Incomplete');
+        const passed = evaluated.filter((g: any) => g.remarks === 'Passed');
+        const passingRate = evaluated.length > 0 ? Math.round((passed.length / evaluated.length) * 100) : 100;
+
+        return {
+          totalStudents: student ? 1 : 0,
+          totalCourses: enrollments?.length || 0,
+          totalEnrollments: enrollments?.length || 0,
+          averageGpa: student ? Number(student.gpa || 0) : 0,
+          passingRate,
+          departmentDistribution: [],
+          yearLevelDistribution: [],
+          statusDistribution: [],
+          recentStudents: [],
+          topStudents: []
+        };
+      }
+
+      // Memory DB fallback for student role
+      const student = db.students.find((s) => s.id === studentId);
+      const enrollments = db.enrollments.filter((e) => e.studentId === studentId);
+      const grades = db.grades.filter((g) => g.studentId === studentId);
+
+      const evaluated = grades.filter((g) => g.remarks !== 'Incomplete');
+      const passed = evaluated.filter((g) => g.remarks === 'Passed');
+      const passingRate = evaluated.length > 0 ? Math.round((passed.length / evaluated.length) * 100) : 100;
+
+      return {
+        totalStudents: student ? 1 : 0,
+        totalCourses: enrollments.length,
+        totalEnrollments: enrollments.length,
+        averageGpa: student ? student.gpa : 0,
+        passingRate,
+        departmentDistribution: [],
+        yearLevelDistribution: [],
+        statusDistribution: [],
+        recentStudents: [],
+        topStudents: []
+      };
+    }
+
+    // Admin & Faculty: Full Institutional Analytics
     if (isSupabaseConnected() && supabase) {
       const [
         { data: students },

@@ -4,10 +4,11 @@ import { authenticate, authorize } from '../../shared/middleware/auth.middleware
 
 const router = Router();
 
-// Read operations: authenticated users (Admin, Faculty, Student)
+// Read operations:
 router.get('/', authenticate, courseController.getAll);
 router.get('/:id', authenticate, courseController.getById);
-router.get('/:id/roster', authenticate, courseController.getRoster);
+// Class roster: restricted to Admin and Faculty only (students cannot see other students in the class)
+router.get('/:id/roster', authenticate, authorize('admin', 'faculty'), courseController.getRoster);
 
 // Write operations: strictly Admin only
 router.post('/', authenticate, authorize('admin'), courseController.create);
